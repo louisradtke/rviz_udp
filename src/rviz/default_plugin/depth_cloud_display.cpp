@@ -293,7 +293,7 @@ void DepthCloudDisplay::subscribe()
     {
       // subscribe to depth map topic
       depthmap_sub_->subscribe(*depthmap_it_, depthmap_topic, queue_size_,
-                               image_transport::TransportHints(depthmap_transport));
+                               image_transport::TransportHints(depthmap_transport), ros::TransportHints().udp());
 
       depthmap_tf_filter_.reset(new tf2_ros::MessageFilter<sensor_msgs::Image>(
           *depthmap_sub_, *context_->getTF2BufferPtr(), fixed_frame_.toStdString(), queue_size_,
@@ -301,7 +301,7 @@ void DepthCloudDisplay::subscribe()
 
       // subscribe to CameraInfo  topic
       std::string info_topic = image_transport::getCameraInfoTopic(depthmap_topic);
-      cam_info_sub_->subscribe(threaded_nh_, info_topic, queue_size_);
+      cam_info_sub_->subscribe(threaded_nh_, info_topic, queue_size_, ros::TransportHints().udp());
       cam_info_sub_->registerCallback(
           boost::bind(&DepthCloudDisplay::caminfoCallback, this, boost::placeholders::_1));
 
@@ -309,7 +309,8 @@ void DepthCloudDisplay::subscribe()
       {
         // subscribe to color image topic
         rgb_sub_->subscribe(*rgb_it_, color_topic, queue_size_,
-                            image_transport::TransportHints(color_transport));
+                            image_transport::TransportHints(color_transport),
+                            ros::TransportHints().udp());
 
         // connect message filters to synchronizer
         sync_depth_color_->connectInput(*depthmap_tf_filter_, *rgb_sub_);

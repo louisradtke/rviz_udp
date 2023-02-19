@@ -158,7 +158,7 @@ protected:
 
     try
     {
-      ros::TransportHints transport_hint = ros::TransportHints().reliable();
+      ros::TransportHints transport_hint = ros::TransportHints().udp();
       // Determine UDP vs TCP transport for user selection.
       if (unreliable_property_->getBool())
       {

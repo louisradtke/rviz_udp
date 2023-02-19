@@ -158,7 +158,7 @@ void InteractiveMarkerDisplay::subscribe()
 {
   if (isEnabled())
   {
-    im_client_->subscribe(topic_ns_);
+    im_client_->subscribe(topic_ns_, , ros::TransportHints().udp());
 
     std::string feedback_topic = topic_ns_ + "/feedback";
     feedback_pub_ =
